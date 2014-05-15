@@ -1,0 +1,18 @@
+
+<!--h2 class="sub-header">{{title}}</h2-->
+<h4 class="sub-header">Log</h4>
+<div id='content_main'>
+
+<table class="table table-striped"">	
+
+{% for i in data %}
+	<tr><td>Event Id </td><td>{{i['event_id']}} </td>	</tr>
+	<tr><td>Time  </td><td>{{i.ts}} </td>	</tr>
+	<tr><td>STDOUT </td><td>{{i.event_stdout}} </td>	</tr>
+	<tr><td>STDERR </td><td>{{i.event_stderr}} </td>	</tr>
+	<tr><td>Comment</td><td> {{i.event_comment}} </td>	</tr>
+
+	
+{% endfor %}
+</table>
+</div>

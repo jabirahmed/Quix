@@ -1,0 +1,17 @@
+<h4 class="sub-header">{{title}}</h4>
+
+
+<div id='content_main'>
+<table class="table table-striped"">
+	<tr><th>Event Id</th><th>Event Name</th><th>Timeout</th></tr>
+{% for i in el %}
+	<tr>
+		<td>{{i.event_id}}</td>
+		<td>{{i.event_name}}</td>
+		<td>{{i.timeout}}</td>
+	</tr>
+{% endfor %}
+</table>
+</div
+
+

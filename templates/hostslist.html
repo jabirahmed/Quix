@@ -1,0 +1,16 @@
+
+<h2 class="sub-header">{{title}}</h2>
+
+<div id='content_main'>
+<table class="table table-striped">
+	<tr><th>HostName</th><th>IP</th><th>Registered</th><th>Comments</th></tr>
+{% for i in hl %}
+		<tr>
+		<td>{{i.host_name}}</td>
+		<td>{{i.host_ip}}</td>
+		<td>{{i.registered}}</td>
+		<td>{{i.comments}}</td>
+	</tr>
+{% endfor %}
+</table>
+</div>

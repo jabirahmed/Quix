@@ -1,0 +1,198 @@
+-- MySQL dump 10.13  Distrib 5.6.17, for osx10.9 (x86_64)
+--
+-- Host: localhost    Database: quix
+-- ------------------------------------------------------
+-- Server version	5.6.17
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `check_events`
+--
+
+DROP TABLE IF EXISTS `check_events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `check_events` (
+  `checkevent_id` varchar(50) NOT NULL,
+  `src_hostid` int(11) DEFAULT NULL,
+  `dest2_hostid` int(11) DEFAULT NULL,
+  `event_id` int(11) DEFAULT NULL,
+  `ts` datetime DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  PRIMARY KEY (`checkevent_id`),
+  KEY `src_hostid` (`src_hostid`),
+  KEY `dest2_hostid` (`dest2_hostid`),
+  KEY `event_id` (`event_id`),
+  KEY `status` (`status`),
+  CONSTRAINT `check_events_ibfk_1` FOREIGN KEY (`src_hostid`) REFERENCES `hosts` (`host_id`),
+  CONSTRAINT `check_events_ibfk_2` FOREIGN KEY (`dest2_hostid`) REFERENCES `hosts` (`host_id`),
+  CONSTRAINT `check_events_ibfk_3` FOREIGN KEY (`event_id`) REFERENCES `event_types` (`event_id`),
+  CONSTRAINT `check_events_ibfk_4` FOREIGN KEY (`status`) REFERENCES `status_codes` (`status_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `check_events`
+--
+
+LOCK TABLES `check_events` WRITE;
+/*!40000 ALTER TABLE `check_events` DISABLE KEYS */;
+INSERT INTO `check_events` VALUES ('64378e0e-bc5e-443f-bbb5-2c82e504c6f8',1,1,3,'2014-05-08 12:47:50',4),('af5da320-c578-46f2-9dfa-1de0af004310',1,1,1,'2014-05-08 20:05:15',3),('e99f260e-eb31-463b-9e1e-ff976836abaa',1,1,3,'2014-05-08 20:02:30',4);
+/*!40000 ALTER TABLE `check_events` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `event_types`
+--
+
+DROP TABLE IF EXISTS `event_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `event_types` (
+  `event_id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_name` varchar(120) DEFAULT NULL,
+  `timeout` int(11) DEFAULT NULL,
+  PRIMARY KEY (`event_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `event_types`
+--
+
+LOCK TABLES `event_types` WRITE;
+/*!40000 ALTER TABLE `event_types` DISABLE KEYS */;
+INSERT INTO `event_types` VALUES (1,'check_ssh',60),(2,'check_apache',60),(3,'send_report',60);
+/*!40000 ALTER TABLE `event_types` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `eventsExeclog`
+--
+
+DROP TABLE IF EXISTS `eventsExeclog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `eventsExeclog` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_id` varchar(50) DEFAULT NULL,
+  `event_statusId` int(11) DEFAULT NULL,
+  `event_stdout` text,
+  `event_stderr` text,
+  `event_comment` text,
+  `ts` datetime DEFAULT NULL,
+  PRIMARY KEY (`log_id`),
+  KEY `event_id` (`event_id`),
+  KEY `event_statusId` (`event_statusId`),
+  CONSTRAINT `eventsexeclog_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `check_events` (`checkevent_id`),
+  CONSTRAINT `eventsexeclog_ibfk_2` FOREIGN KEY (`event_statusId`) REFERENCES `status_codes` (`status_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `eventsExeclog`
+--
+
+LOCK TABLES `eventsExeclog` WRITE;
+/*!40000 ALTER TABLE `eventsExeclog` DISABLE KEYS */;
+INSERT INTO `eventsExeclog` VALUES (4,'64378e0e-bc5e-443f-bbb5-2c82e504c6f8',4,'Failed to run check','','','2014-05-08 12:47:50'),(5,'e99f260e-eb31-463b-9e1e-ff976836abaa',4,'Failed to run check','','','2014-05-08 20:02:30'),(6,'af5da320-c578-46f2-9dfa-1de0af004310',3,'pid:11349 stdout:/etc/init.d/sshd restart\n stderr:None','','','2014-05-08 20:05:15');
+/*!40000 ALTER TABLE `eventsExeclog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `hosts`
+--
+
+DROP TABLE IF EXISTS `hosts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hosts` (
+  `host_id` int(11) NOT NULL AUTO_INCREMENT,
+  `host_name` varchar(120) DEFAULT NULL,
+  `host_ip` varchar(120) DEFAULT NULL,
+  `registered` int(11) DEFAULT NULL,
+  `Comments` text,
+  `ts` datetime DEFAULT NULL,
+  PRIMARY KEY (`host_id`),
+  UNIQUE KEY `host_ip` (`host_ip`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `hosts`
+--
+
+LOCK TABLES `hosts` WRITE;
+/*!40000 ALTER TABLE `hosts` DISABLE KEYS */;
+INSERT INTO `hosts` VALUES (1,'localhost','127.0.0.1',1,'sample','2014-05-08 17:44:06'),(2,'vm1','192.168.56.2',1,'sample','2014-05-08 17:44:06');
+/*!40000 ALTER TABLE `hosts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `server_tlog`
+--
+
+DROP TABLE IF EXISTS `server_tlog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `server_tlog` (
+  `tlog_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ts` datetime DEFAULT NULL,
+  `tlog_txt` text,
+  PRIMARY KEY (`tlog_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `server_tlog`
+--
+
+LOCK TABLES `server_tlog` WRITE;
+/*!40000 ALTER TABLE `server_tlog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `server_tlog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `status_codes`
+--
+
+DROP TABLE IF EXISTS `status_codes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `status_codes` (
+  `status_id` int(11) NOT NULL AUTO_INCREMENT,
+  `status` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`status_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `status_codes`
+--
+
+LOCK TABLES `status_codes` WRITE;
+/*!40000 ALTER TABLE `status_codes` DISABLE KEYS */;
+INSERT INTO `status_codes` VALUES (1,'CHECK_SCHEDULED'),(2,'CHECK_RUNNING'),(3,'CHECK_SUCCESSFULL'),(4,'CHECK_FAILED'),(5,'CHECK_RERUN');
+/*!40000 ALTER TABLE `status_codes` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-05-09  1:38:22

@@ -1,0 +1,69 @@
+
+<h2 class="sub-header">{{title}}</h2>
+
+<div id='content_main'>
+<table class="table table-striped">
+	<tr><th>Event time</th><th>Event Name</th><th>Event ID</th><th>Source Host (triggered from)</th><th>Destination Host</th></tr>
+	{% for i in active_checks %}
+	<tr>
+		<td> {{i.ts}}</td>
+		<td>{{i.event_name}}</td>
+		<td><a href="#" id="eventid-{{i.event_id}}">{{i.event_id}}</a></td>
+		<td>{{i.src}}</td>
+		<td>{{i.dest}}</td>		
+		</tr>
+	{% else %}
+	<tr>
+		<td colspan=4>No Checks found</td>		
+		
+</tr>
+{% endfor %}
+</table>
+</div>
+
+
+<!-- Modal -->
+    <div class="table-responsive" id='content'>
+	
+
+<div class=" col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Event Log</h4>
+      </div>
+      <div class="modal-body" id='modal-body'>
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <!--button type="button" class="btn btn-primary">Save changes</button-->
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+
+<script>
+
+
+
+$("[id*=eventid-]").click(function(e){
+	val=$(this).text();
+	/*alert("http://localhost:5000/eventLog/"+val);*/
+	$('#modal-body').load("http://localhost:5000/eventLog/"+val)	;
+	$('#myModal').modal('show');
+	
+});
+/*
+$("[id*=eventid-]").click(function(e){
+	$('#myModal').modal('show');
+	alert($(this).text());
+});
+*/		
+
+</script>
