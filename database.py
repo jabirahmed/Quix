@@ -2,7 +2,23 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import logging
-engine = create_engine('mysql://root@localhost/quix', convert_unicode=True)
+import os
+import ConfigParser
+
+'''
+Adding the Database Config from the config file
+
+'''
+
+config = ConfigParser.ConfigParser()
+config.read("config/quix.conf")
+
+user = config.get("mysql", "user")
+password = config.get("mysql", "password")
+server = config.get("mysql", "server")
+port = config.get("mysql", "port")
+
+engine = create_engine('mysql://%s:%s@%s:%s/quix'%(user, password, server, port), convert_unicode=True)
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
