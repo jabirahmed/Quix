@@ -45,7 +45,7 @@ def statuscodes():
 	dict={};
 	for a in result:
 		dict[a.status_id]=a.status
-	utilObj.log_debug(json.dumps(dict))	
+	utilObj.log_info(json.dumps(dict))	
 	return json.dumps(dict);
 
 @app.route("/a/")
