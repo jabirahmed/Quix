@@ -15,7 +15,14 @@ Requirement
   * pip install pyzmq
   * sudo -E pip install MySQLdb
 
-On Mac OSX  10.8 and above
+  Ubuntu Based Packages
+
+  * sudo apt-get install python-mysqldb
+  * sudo apt-get install -y libzmq1
+  * sudo apt-get install mysql-server mysql-client
+
+	On Mac OSX  10.8 and above
+	
   * export CFLAGS=-Qunused-arguments
   * export CPPFLAGS=-Qunused-arguments
 

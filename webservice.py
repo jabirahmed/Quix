@@ -145,12 +145,12 @@ def triggerCheck(hostname,check):
 def shutdown():
     utilObj.stop_zmq()
     func = request.environ.get('werkzeug.server.shutdown')
-    tilObj.log_info("Shutting down the server")
+    utilObj.log_info("Shutting down the server")
     if func is None:
     	tilObj.log_error("Shutting down the server")
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
-    tilObj.log_info("Shutting down the server")
+    utilObj.log_info("Shutting down the server")
     return 'Server shutting down...'
 
 # For Static Files
