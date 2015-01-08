@@ -13,6 +13,7 @@ Requirement
   * pip install flask
   * pip install sqlalchemy
   * pip install pyzmq
+  * pip install MySQL-python
   * sudo -E pip install MySQLdb
 
   Ubuntu Based Packages
@@ -45,4 +46,11 @@ Web API's
  * /listChecks/<status>  : List all check with specific status
  * /listChecks/     : List all check 
  * /eventLog/<eventid>  : Event log history
- * /eventLog/
+ * /eventLog
+
+Starting the server
+-------------------
+ * ./webservice.py
+
+client
+ * ./quixListener.py
